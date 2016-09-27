@@ -70,7 +70,7 @@ flask>=0.11
 
 Now Google App Engine knows to look inside of the `lib` folder relative to our applications location.  Let's go ahead and install Flask inside of the lib folder like so:
 
-```
+```bash
 mkdir lib
 pip install -t lib -r requirements.txt
 ```
@@ -85,7 +85,7 @@ If the command starts successfully you should be able to visit your browser at `
 
 Since we're using SCM this is pretty straight-forward.  First push your code up:
 
-```
+```bash
 git add app.yaml gcp.py lib requirements.txt
 git commit -m "Initial commit"
 git push
@@ -94,7 +94,7 @@ git push
 On the  Google Cloud Console you should see your code populate into their website under the "Source Code" section.
 
 Finally run this locally:
-```
+```bash
 appcfg.py -A [YOUR_PROJECT_ID] -V v1 update ./
 ```
 

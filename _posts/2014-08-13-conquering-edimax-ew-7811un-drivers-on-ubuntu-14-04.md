@@ -22,7 +22,7 @@ Great, for those who care that function the drivers depends on is deprecated; he
 There was a fork made of these drivers which is almost functional [here](https://github.com/dz0ny/rt8192cu).
 
 First install the dependencies of these drivers, then download the drivers:
-```
+```bash
 sudo apt-get update && sudo apt-get install git build-essential linux-headers-generic dkms
 git clone https://github.com/dz0ny/rt8192cu.git --depth 1
 ```
@@ -33,7 +33,7 @@ DBG_871X("build time: %s %s\n", __DATE__, __TIME__);
 ```
 
 If line does not exist then it may have been fixed since my last update. After this line doesn’t exist finish up by executing the following:
-```language-bash
+```bash
 cd rt8192cu
 sudo make dkms
 ```

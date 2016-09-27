@@ -33,7 +33,7 @@ Before continuing you will need to have the container you want to run ready to p
 
 Next you will want to get `kubectl` ready to use with the following gcloud command:
 
-```
+```bash
 gcloud container clusters --zone [projects master zone eg us-central1-f] --project [project-id] get-credentials [container cluster name]
 ```
 
@@ -46,7 +46,7 @@ kubeconfig entry generated for [container cluster name].
 
 Now perform a deployment of your container like so:
 
-```
+```bash
 run [deployment name] --image=gcr.io/[project id]/[container name]:[version]
 ```
 
@@ -65,20 +65,20 @@ Before we are able to add secrets to our kubernetes deployment (pod) we will nee
 For this purpose I find it easiest to go into the Google Cloud Shell and connect from there, navigate back to your [sql instances](https://console.cloud.google.com/sql/instances) in the cloud console.  Under your instance, under "Access Control" -> "Users" select "Change root password".  Set this to something very secure that you'll remember for the time being to configure other users.  
 
 Next you'll need to figure out your IP address to allow access to your SQL instance.  From the cloud shell run:
-```
-$ curl -4 icanhazip.com
+```bash
+curl -4 icanhazip.com
 104.123.123.123
 ```
 
 Add this IP address under the "Access Control" -> "Authorization" section of your Cloud SQL instance.  Now connect to your SQL instance from the cloud shell with:
 
-```
+```bash
 mysql -h [sql instance IP] -u root -p'[mysql password]'
 ```
 
 And create a user and database:
 
-```
+```mysql
 mysql> CREATE DATABASE somedatabase;
 Query OK, 1 row affected (0.01 sec)
 mysql> GRANT ALL PRIVILEGES ON somedatabase.* TO 'someuser'@'%' IDENTIFIED BY 'UnENCRYPT3DPAssWORD';
@@ -87,7 +87,7 @@ Query OK, 0 rows affected, 1 warning (0.00 sec)
 
 Now close out of your session with ctrl+c, and verify the above worked:
 
-```
+```bash
 mysql -h [sql instance IP] -u someuser -p'UnENCRYPT3DPAssWORD' somedatabase
 ```
 
@@ -97,7 +97,7 @@ Now delete the authorized network you added previously to give access to your cl
 
 Now you will want to get all of the base64 versions of your secrets, from the linux command line it looks like:
 
-```
+```bash
 echo "my-secret-password" | base64
 bXktc2VjcmV0LXBhc3N3b3JkCg==
 ```
@@ -119,19 +119,19 @@ data:
 ```
 
 Upload your secrets with
-```
+```bash
 kubectl create -f ./secrets.yml
 ```
 
 Next find your deployment name again with
 
-```
+```bash
 kubectl get deployment
 ```
 
 Modify your deployment
 
-```
+```bash
 kubectl edit deployment [deployment-name]
 ```
 
@@ -179,7 +179,7 @@ The important parts out of that are:
 
 After saving and exiting assuming it's successful your secrets are then available at `/etc/secrets/<secret-name>`.  For example, the database hostname secret is at `/etc/secrets/hostname`
 
-```
+```bash
 cat /etc/secrets/hostname
 104.123.123.123 
 ```

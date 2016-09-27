@@ -14,8 +14,8 @@ Our requirements for the webserver are for it to redirect any requests to `/path
 For the purpose of this guide I'm going to assume you have a vm or machine that you can run nginx on, I prefer not to run an http server on the router to avoid adding any additional load.  The commands in this article are geared towards RHEL/Centos, but the configuration files should be inter-changeable between distros.
 
 ### Install nginx
-```
-$ yum install -y nginx
+```bash
+yum install -y nginx
 ```
 
 ### Configure nginx
@@ -62,17 +62,17 @@ Remove the following from `/etc/nginx/nginx.conf`:
 ```
 
 Start/Restart and Enable nginx
-```
-$ systemctl restart nginx
-$ systemctl enable nginx
+```bash
+systemctl restart nginx
+systemctl enable nginx
 ```
 
 Now we need to get our dummy black video.  I googled for a 5 second black clip and found [this](https://www.youtube.com/watch?v=xE0Bp6ENy_8) then converted it to .mp4 using [this](http://www.clipconverter.cc/).
 
 Download the file to `media/black.mp4`
-```
-$ mkdir /usr/share/nginx/html/media
-$ wget -O /usr/share/nginx/html/media/black.mp4 "http://link/to/file"
+```bash
+mkdir /usr/share/nginx/html/media
+wget -O /usr/share/nginx/html/media/black.mp4 "http://link/to/file"
 ```
 
 Verify in  your browser that things work as expected, any URL's matching `/path/*` should redirect you to a video, anything else a 404 page.
@@ -83,26 +83,25 @@ I expanded on the script in the article referenced above.  This one is written i
 {% gist 458fb2c899effe53954b018f00c0bccd %}
 
 Now make the script executable
-```
-$ chmod +x /config/user-data/update-adblock-dnsmasq.py
+```bash
+chmod +x /config/user-data/update-adblock-dnsmasq.py
 ```
 
 Try executing it
-```
-$ /config/user-data/update-adblock-dnsmasq.py
+```bash
+/config/user-data/update-adblock-dnsmasq.py
 ```
 
 Verify it's working from a machine on your network, your output should be similar:
-```
-$ curl secure-us.imrworldwide.com/path/
+```bash
+curl secure-us.imrworldwide.com/path/
 
-$ curl measuremap.com
-
+curl measuremap.com
 ```
 
 Add in a cron job to update the general ad blocking every Sunday at 4AM:
-```
-$ sudo crontab -e
+```bash
+sudo crontab -e
 ```
 ```
 <...>

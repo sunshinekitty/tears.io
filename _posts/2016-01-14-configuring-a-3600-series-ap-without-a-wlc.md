@@ -31,13 +31,13 @@ You'll need to have a TFTP server setup on a machine located in your network whi
 There are various guides describing how to install and configure a TFP server, and so I invite you to Google around if this one doesn't suffice.
 
 First, verify your machine has xinetd installed and running.  By default on Centos 7 this is the case.
-```
+```bash
 [root@hv1 ~]# ps -alxww | grep /usr/sbin/xinet
 0:00 /usr/sbin/xinetd -stayalive -pidfile /var/run/xinetd.pid
 ```
 
 Now install `tftp-server`
-```
+```bash
 yum install -y tftp-server tftp
 ```
 
@@ -63,19 +63,19 @@ service tftp
 
 Now change `disable = yes` to `disable = no`, verify that `server_args` are set to `-s /var/lib/tftpboot` and reload the service.
 
-```
+```bash
 systemctl reload xinetd
 ```
 
 To verify that TFTP is working as expected make a test file inside of `/var/lib/tftpboot` to try downloading.
 
-```
+```bash
 echo 'boop' > /var/lib/tftpboot/test.txt
 ```
 
 Then try to download it
 
-```
+```bash
 [root@hv1 ~]# tftp localhost
 tftp> get test.txt
 [root@hv1 ~]# cat test.txt
@@ -88,7 +88,7 @@ If this works, you're ready to proceed.
 
 Copy over your firmware file to your TFTP directory.
 So in my case, I ran:
-```
+```bash
 cp ap3g2-k9w7-tar.153-3.JC.tar /var/lib/tftpboot/
 ```
 

@@ -11,13 +11,13 @@ After checking in the logs via journalctl (and re-installing FreeIPA 3-4 times) 
 There are a few ways you can go about fixing this.
 
 ### Remove cloud-init
-```
+```bash
 yum remove cloud-init
 ```
 
 ### Update the cloud-init config
 Remove set\_hostname and update_hostname from the cloud-init config
-```
+```bash
 vim /etc/cloud/cloud.cfg
 ```
 ```
@@ -29,7 +29,7 @@ vim /etc/cloud/cloud.cfg
 
 ### Update nova.conf
 This will change what the domain of your servers is set to, if you're okay with this format then this should be preferred as it doesn't require any changes be done on the guest VM.
-```
+```bash
 vim /etc/nova/nova.conf
 ```
 ```
@@ -37,7 +37,7 @@ vim /etc/nova/nova.conf
 dhcp_domain=novalocal
 <...>
 ```
-```
+```bash
 systemctl restart openstack-nova-api.service
 ```
 

@@ -23,7 +23,7 @@ I'll be referring to these servers using these hostnames in this guide.  I'd lik
 In order to authenticate with mschap it's required that we hand over NTLM hashes from our FreeIPA instance for FreeRADIUS to use.  This is where security becomes a problem, these hashes can be used to brute-force encrypted passwords in FreeIPA.  Make sure your RADIUS instance is on a private network and well secured.
 
 Follow along with generating the NTLM hashes below:
-```
+```bash
 # WARNING the following may try and run `ipa-server-upgrade`
 [root@freeipa ~]# yum -y install ipa-server-trust-ad
 [root@freeipa ~]# ipa-adtrust-install
@@ -122,7 +122,7 @@ Now create a user for FreeRADIUS to access FreeIPA using the Web UI. We'll see w
 
 ## Setting up FreeRADIUS
 
-```
+```bash
 [root@radius ~]# yum -y update
 [root@radius ~]# yum -y install freeradius freeradius-utils freeradius-ldap
 [root@radius ~]# echo "192.168.0.55 radius.tears.io" >> /etc/hosts # replace IP with your own
@@ -256,7 +256,6 @@ post-proxy {
 }
 ```
 Create `/etc/raddb/mods-enabled/ldap` and add:
-{% raw  %}
 ```
 ldap {
         server = "freeipa.tears.io"
@@ -270,7 +269,9 @@ ldap {
 
         user {
                 base_dn = "${..base_dn}"
+{% raw  %}
                 filter = "(uid=%{%{Stripped-User-Name}:-%{User-Name}})"
+{% endraw %}
         }
 
         group {
@@ -347,28 +348,27 @@ ldap {
         }
 }
 ```
-{% endraw %}
 Finally:
-```
+```bash
 systemctl start radiusd
 systemctl enable radiusd
 ```
 If you run into issues starting radiusd you can run `radiusd -X` to help debug
 
 You can test pap works with:
-```
+```bash
 radtest {username} {password} {hostname} 10 {radius_secret}
 ```
 
 And mschap with:
-```
+```bash
 radtest -t mschap {username} {password} {hostname} 10 {radius_secret}
 ```
 
 ## Setting up Edgerouter Lite
 
 First create the ipsec VPN.
-```
+```bash
 alex@router:~$ configure
 [edit]
 # Create an ipsec interface on your WAN port
@@ -381,7 +381,7 @@ set vpn ipsec nat-networks allowed-network 0.0.0.0/0
 
 Ipsec is a great VPN tunnel to use, however it's not so great at handling authentication.  Which is why we use L2TP to implement this.
 
-```
+```bash
 # Bind to your WAN IP (that of your WAN port)
 set vpn l2tp remote-access dhcp-interface eth0
 # Set your pool of IP addresses VPN clients should use for dhcp
