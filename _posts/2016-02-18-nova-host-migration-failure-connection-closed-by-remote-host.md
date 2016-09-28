@@ -1,5 +1,6 @@
 ---
 layout: post
+comments: true
 title: Nova host migration failure "Connection closed by remote host"
 preview: Recently while trying to migrate a host between nova compute nodes I found that I was getting the following error&#58; `ResizeError&#58; Resize error&#58; not able to execute ssh command&#58; Unexpected error while running command..`
 ---

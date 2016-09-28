@@ -1,5 +1,6 @@
 ---
 layout: post
+comments: true
 title: Google Cloud Platform - Connecting GKE and Cloud SQL
 preview: In this post I'll describe the process needed to setup a kubernetes pod on GKE (Google container engine) that has the secrets needed for your containers to connect to a Cloud SQL instance.
 ---
@@ -65,6 +66,7 @@ Before we are able to add secrets to our kubernetes deployment (pod) we will nee
 For this purpose I find it easiest to go into the Google Cloud Shell and connect from there, navigate back to your [sql instances](https://console.cloud.google.com/sql/instances) in the cloud console.  Under your instance, under "Access Control" -> "Users" select "Change root password".  Set this to something very secure that you'll remember for the time being to configure other users.  
 
 Next you'll need to figure out your IP address to allow access to your SQL instance.  From the cloud shell run:
+
 ```bash
 curl -4 icanhazip.com
 104.123.123.123
@@ -119,6 +121,7 @@ data:
 ```
 
 Upload your secrets with
+
 ```bash
 kubectl create -f ./secrets.yml
 ```

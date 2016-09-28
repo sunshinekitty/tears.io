@@ -1,5 +1,6 @@
 ---
 layout: post
+comments: true
 title: Configuring a 3600 series AP without a WLC
 preview: I recently purchased a Cisco Aironet 3602i.  By default this series of access points are configured to be a light access point, or LAP for short.  For larger networks with many access points it makes sense to configure them all simultaneously with something called a wireless lan controller (WLC).  Me not knowing this before ordering my AP I found myself at a loss.
 ---
@@ -31,12 +32,14 @@ You'll need to have a TFTP server setup on a machine located in your network whi
 There are various guides describing how to install and configure a TFP server, and so I invite you to Google around if this one doesn't suffice.
 
 First, verify your machine has xinetd installed and running.  By default on Centos 7 this is the case.
+
 ```bash
 [root@hv1 ~]# ps -alxww | grep /usr/sbin/xinet
 0:00 /usr/sbin/xinetd -stayalive -pidfile /var/run/xinetd.pid
 ```
 
 Now install `tftp-server`
+
 ```bash
 yum install -y tftp-server tftp
 ```
@@ -88,11 +91,13 @@ If this works, you're ready to proceed.
 
 Copy over your firmware file to your TFTP directory.
 So in my case, I ran:
+
 ```bash
 cp ap3g2-k9w7-tar.153-3.JC.tar /var/lib/tftpboot/
 ```
 
 Login to your AP and run the following
+
 ```
 ap: en
 ap# ping (your tftp server, verify ap can reach it)

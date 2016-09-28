@@ -1,5 +1,6 @@
 ---
 layout: post
+comments: true
 title: How to tie Edgerouter Lite IPSEC VPN authentication into FreeRADIUS (FreeIPA)
 preview: I hate managing user accounts, and so should you! That's why I try and get all that I can tied into FreeIPA's ldap so that they're only managed in one place.  I'm going to show you how to setup an ipsec vpn on an Edgerouter Lite which authenticates against a local freeipa instance.
 ---
@@ -23,6 +24,7 @@ I'll be referring to these servers using these hostnames in this guide.  I'd lik
 In order to authenticate with mschap it's required that we hand over NTLM hashes from our FreeIPA instance for FreeRADIUS to use.  This is where security becomes a problem, these hashes can be used to brute-force encrypted passwords in FreeIPA.  Make sure your RADIUS instance is on a private network and well secured.
 
 Follow along with generating the NTLM hashes below:
+
 ```bash
 # WARNING the following may try and run `ipa-server-upgrade`
 [root@freeipa ~]# yum -y install ipa-server-trust-ad
@@ -116,6 +118,7 @@ You must make sure these network ports are open:
 
 [root@freeipa ~]#
 ```
+
 Obviously make sure that these ports are open (HOW-TO not covered in this post).
 
 Now create a user for FreeRADIUS to access FreeIPA using the Web UI. We'll see we made it with username "freeradius" with password of "replacethispassword". I typically like to add any service accounts under a group of "service" to keep things organized.
@@ -130,6 +133,7 @@ Now create a user for FreeRADIUS to access FreeIPA using the Web UI. We'll see w
 
 Next open up `/etc/raddb/clients.conf` and add in the following:
 <em>Note: Replace the subnet with your own local subnet, replace $ECRET with a better one ;-)</em>
+
 ```
 client 192.168.0.0/24 {
         secret          = $ECRET
@@ -141,10 +145,13 @@ client 192.168.0.0/24 {
 Optionally you can configure a `localhost` client so that you can test from your localhost, the config would look the same but with `client localhost {<...>}`.
 
 Append the following to `/etc/raddb/users`:
+
 ```
 DEFAULT Auth-Type := LDAP
 ```
+
 Add the following to the end of `/etc/raddb/dictionary`:
+
 ```
 VALUE           Auth-Type               Local                   0
 VALUE           Auth-Type               System                  1
@@ -155,6 +162,7 @@ VALUE           Auth-Type               LDAP                    5
 ```
 
 Create `/etc/raddb/sites-enabled/default` and add:
+
 ```
 server default {
 listen {
@@ -255,7 +263,9 @@ post-proxy {
 }
 }
 ```
+
 Create `/etc/raddb/mods-enabled/ldap` and add:
+
 ```
 ldap {
         server = "freeipa.tears.io"
@@ -348,19 +358,24 @@ ldap {
         }
 }
 ```
+
 Finally:
+
 ```bash
 systemctl start radiusd
 systemctl enable radiusd
 ```
+
 If you run into issues starting radiusd you can run `radiusd -X` to help debug
 
 You can test pap works with:
+
 ```bash
 radtest {username} {password} {hostname} 10 {radius_secret}
 ```
 
 And mschap with:
+
 ```bash
 radtest -t mschap {username} {password} {hostname} 10 {radius_secret}
 ```
@@ -368,6 +383,7 @@ radtest -t mschap {username} {password} {hostname} 10 {radius_secret}
 ## Setting up Edgerouter Lite
 
 First create the ipsec VPN.
+
 ```bash
 alex@router:~$ configure
 [edit]
@@ -399,6 +415,7 @@ exit
 ```
 
 Lastly open the following ports on the 'local' firewall for your router:
+
 ```
 IKE - UDP port 500
 L2TP - UDP port 1701

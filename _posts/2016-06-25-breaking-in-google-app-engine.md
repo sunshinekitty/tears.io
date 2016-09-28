@@ -1,5 +1,6 @@
 ---
 layout: post
+comments: true
 title: Breaking in Google App Engine
 preview: This post is specifically on Google App Engine, and goes over deploying a simple web application from scratch.
 ---
@@ -55,6 +56,7 @@ Google is smart enough to do `app.run()` for us, and so that is omitted.
 Since Flask isn't in the standard library for Python this adds some small complications, Google App Engine requires that any imported libraries exist in our applications folder.
 
 Let's update `gcp.py` to look like the following at the top:
+
 ```python
 from google.appengine.ext import vendor
 
@@ -64,6 +66,7 @@ vendor.add('lib')
 ```
 
 Let's also create a `requirements.txt` file and add the following to it:
+
 ```
 flask>=0.11
 ```
@@ -94,6 +97,7 @@ git push
 On the  Google Cloud Console you should see your code populate into their website under the "Source Code" section.
 
 Finally run this locally:
+
 ```bash
 appcfg.py -A [YOUR_PROJECT_ID] -V v1 update ./
 ```

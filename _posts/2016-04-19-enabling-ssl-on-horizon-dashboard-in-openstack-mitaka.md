@@ -1,5 +1,6 @@
 ---
 layout: post
+comments: true
 title: Enabling SSL on Horizon dashboard in Openstack Mitaka
 preview: I recently went looking around to see if there was any special configuration needed to enable SSL on the Horizon dashboard.  I found lots of articles saying you need to modify `local_settings.py`.  It looks like in Mitaka this is no longer the case.
 ---

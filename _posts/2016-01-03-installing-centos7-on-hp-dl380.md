@@ -1,5 +1,6 @@
 ---
 layout: post
+comments: true
 title: Installing Centos7 on an HP G5 DL380
 preview: Starting with RHEL/EL7 the drivers for the raid controller card, the P400i, are no longer loaded in by default.  When you go to install Centos 7 on one of these you will likely see that it doesn't detect your LD.
 ---
@@ -25,6 +26,7 @@ Now run `grub2-mkconfig -o /boot/grub2/grub.cfg` and reboot the machine.  It sho
 
 **Success!**  
 *note: hpssacli installed separately*
+
 ```
 [root@localhost ~]# hpssacli ctrl all show config
 
