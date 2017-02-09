@@ -7,8 +7,8 @@ permalink:        pretty
 
 # Setup
 title:            Tears
-tagline:          'Tutorials and explanations on Linux, Openstack, Cisco, and more.'
-description:      'Tutorials and explanations on Linux, Openstack, Cisco, and more.'
+tagline:          'Tech rants and tutorials'
+description:      'Tech rants and tutorials'
 url:              http://tears.io
 baseurl:          /
 
